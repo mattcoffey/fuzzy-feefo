@@ -1,0 +1,53 @@
+plugins {
+    id "application"
+}
+
+apply plugin : "java" 
+apply plugin: "groovy"
+
+version = "1.0"
+description = "Feefo Test"
+
+sourceCompatibility = 1.10
+
+ext {
+   javaMainClass = "com.feefo.launcher.Main"
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
+repositories {
+  mavenCentral()
+  maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+dependencies {
+  implementation 'commons-logging:commons-logging:1.2'
+  implementation 'org.codehaus.groovy:groovy:3.0.10'
+  testImplementation platform("org.spockframework:spock-bom:2.1-groovy-3.0")
+  testImplementation "org.spockframework:spock-core"
+  testImplementation "org.spockframework:spock-junit4"
+
+  //lombok
+  compileOnly 'org.projectlombok:lombok:1.18.24'
+  annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+  testCompileOnly 'org.projectlombok:lombok:1.18.24'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+  testImplementation "org.hamcrest:hamcrest-core:2.2"
+  testRuntimeOnly 'net.bytebuddy:byte-buddy:1.12.8'
+  testRuntimeOnly "org.objenesis:objenesis:3.2"
+  implementation "org.codehaus.groovy:groovy-sql:3.0.9"
+}
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events "passed", "skipped", "failed"
+  }
+}
+
+
