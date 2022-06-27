@@ -20,6 +20,18 @@ class IntArrayCalculatorSpec extends Specification {
             toArray([10, -1, -1, 4, -1, 0, 0, 3, 0]) | [-1, 0].toSet()
     }
 
+
+    def "should calculate mean"() {
+        expect:
+            tested.calculateMean(input) == expected
+
+        where:
+            input                | expected
+            toArray([3, 2, 1])   | 2
+            toArray([0, -1])     | BigDecimal.valueOf(-0.5)
+            toArray([-1, 2, 8]) | 3
+    }
+
     def "should calculate median"() {
         expect:
             tested.calculateMedian(input) == expected
