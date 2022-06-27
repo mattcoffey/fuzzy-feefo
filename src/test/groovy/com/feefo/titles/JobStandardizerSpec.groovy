@@ -18,8 +18,6 @@ class JobStandardizerSpec extends Specification {
     }
 
     def "should throw when null parameter"() {
-        given:
-            null == null
         when:
             new JobStandardizer().standardize(null)
         then:
