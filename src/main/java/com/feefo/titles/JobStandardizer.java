@@ -1,10 +1,9 @@
 package com.feefo.titles;
 
-import lombok.val;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Set;
 
 public class JobStandardizer {
 
@@ -16,43 +15,41 @@ public class JobStandardizer {
      * @return the probable best match standard title for the parameter
      */
     public String standardize(String title) {
-        if(title == null) {
+        if (title == null) {
             throw new IllegalArgumentException("title cannot be null");
         }
-        val scores = new HashSet<MatchScore>();
-        for(String standard : standardTitles) {
-            val matchScore = MatchScore.builder().value(standard).score(score(title, standard)).build();
-            scores.add(matchScore);
-        }
-        return scores.stream().max(Comparator.naturalOrder()).get().getValue();
+        return standardTitles.stream()
+                .map((standard) -> MatchScore.builder().value(standard).score(score(title, standard)).build())
+                .max(Comparator.naturalOrder()).get().getValue();
     }
 
     /**
      * TODO consider splitting scoring logic out into a separate class so that it can be reused for different things
+     *
      * @param a
      * @param b
      * @return the sum of the match scores for each word divided by the number of words
      */
     private BigDecimal score(String a, String b) {
-        if(a.equals(b)) {
+        if (a.equals(b)) {
             return BigDecimal.valueOf(1.0);
         }
         BigDecimal score = BigDecimal.valueOf(0.0);
-        String[] jobWords = a.toLowerCase().split(" ");
-        String[] standardWords = b.toLowerCase().split(" ");
-        for(String standardWord : standardWords) {
-            for(String jobWord : jobWords) {
-                if(standardWord.equals(jobWord)) {
+        String[] aWords = a.toLowerCase().split(" ");
+        String[] bWords = b.toLowerCase().split(" ");
+        for (String bWord : bWords) {
+            for (String aWord : aWords) {
+                if (bWord.equals(aWord)) {
                     score = score.add(BigDecimal.valueOf(1.0));
-                } else if(standardWord.contains(jobWord) || jobWord.contains(standardWord)) {
+                } else if (bWord.contains(aWord) || aWord.contains(bWord)) {
                     score = score.add(BigDecimal.valueOf(0.8));
                 } else {
-                    score = score.add(lettersScore(jobWord, standardWord));
+                    score = score.add(lettersScore(aWord, bWord));
                 }
             }
         }
 
-        return score.divide(BigDecimal.valueOf(jobWords.length), new MathContext(3));
+        return score.divide(BigDecimal.valueOf(aWords.length), new MathContext(3));
     }
 
     /**
@@ -64,14 +61,14 @@ public class JobStandardizer {
      */
     private BigDecimal lettersScore(String a, String b) {
         int count = 0;
-        for(int i = 0; i<a.length(); i++) {
-            if(b.indexOf(a.charAt(i)) != -1) {
+        for (int i = 0; i < a.length(); i++) {
+            if (b.indexOf(a.charAt(i)) != -1) {
                 count++;
             }
         }
 
-        for(int i = 0; i<b.length(); i++) {
-            if(a.indexOf(b.charAt(i)) != -1) {
+        for (int i = 0; i < b.length(); i++) {
+            if (a.indexOf(b.charAt(i)) != -1) {
                 count++;
             }
         }
