@@ -30,7 +30,7 @@ public class IntArrayCalculator {
     BigDecimal calculateMedian(int[] input) {
         val list = Arrays.stream(input).sorted().toArray();
         val medianPosition = ((list.length + 1) / 2) - 1;
-        if(list.length % 2 == 0) {
+        if (list.length % 2 == 0) {
             return BigDecimal.valueOf(
                     IntStream.of(list[medianPosition], list[medianPosition + 1])
                             .average().getAsDouble());
@@ -50,6 +50,7 @@ public class IntArrayCalculator {
 
     /**
      * (probably a better way of doing this using stream groupby)
+     *
      * @param input
      * @return the set of equally most frequently occurring members of this dataset
      */
@@ -57,13 +58,13 @@ public class IntArrayCalculator {
         Set<Integer> modes = new HashSet<>();
         var occurrences = 0;
         var previousMostOccurrences = 0;
-        for(int distinct : IntStream.of(input).distinct().toArray()) {
+        for (int distinct : IntStream.of(input).distinct().toArray()) {
             occurrences = frequency(input, distinct);
-            if(previousMostOccurrences < occurrences) {
+            if (previousMostOccurrences < occurrences) {
                 modes.clear();
                 modes.add(distinct);
                 previousMostOccurrences = occurrences;
-            } else if(previousMostOccurrences == occurrences) {
+            } else if (previousMostOccurrences == occurrences) {
                 modes.add(distinct);
             }
         }

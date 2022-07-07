@@ -14,7 +14,7 @@ class JobStandardizerSpec extends Specification {
             "Engineering developer" | "Software engineer"
             "Accountant"            | "Accountant"
             "Chief Accountant"      | "Accountant"
-            "No similarity"         | "Quantity surveyor"
+            "No similarity"         | "Accountant"
     }
 
     def "should throw when null parameter"() {

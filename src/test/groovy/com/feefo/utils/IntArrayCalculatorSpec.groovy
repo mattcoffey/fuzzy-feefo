@@ -26,9 +26,9 @@ class IntArrayCalculatorSpec extends Specification {
             tested.calculateMean(input) == expected
 
         where:
-            input                | expected
-            toArray([3, 2, 1])   | 2
-            toArray([0, -1])     | BigDecimal.valueOf(-0.5)
+            input               | expected
+            toArray([3, 2, 1])  | 2
+            toArray([0, -1])    | BigDecimal.valueOf(-0.5)
             toArray([-1, 2, 8]) | 3
     }
 
@@ -50,7 +50,7 @@ class IntArrayCalculatorSpec extends Specification {
         where:
             input                | expected
             toArray([3, 2, 1])   | 2
-            toArray([0, -1])      | 1
+            toArray([0, -1])     | 1
             toArray([-1, 2, 10]) | 11
     }
 

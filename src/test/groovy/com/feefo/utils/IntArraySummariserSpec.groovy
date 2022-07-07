@@ -7,7 +7,7 @@ class IntArraySummariserSpec extends Specification {
 
     def MEDIAN = BigDecimal.valueOf(1.0)
     def MEAN = BigDecimal.valueOf(2.0)
-    def MODE = [1,2,3].toSet()
+    def MODE = [1, 2, 3].toSet()
     def RANGE = 4
 
     IntArrayCalculator calculator

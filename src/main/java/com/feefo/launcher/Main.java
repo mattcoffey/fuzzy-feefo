@@ -13,6 +13,7 @@ public class Main {
     /**
      * Launcher and main program
      * TODO clarify requirements for usages for this software and output format and make a proper class with tests
+     *
      * @param args
      */
     public static void main(String... args) {
@@ -24,6 +25,7 @@ public class Main {
 
     /**
      * parse program arguments
+     *
      * @param args
      * @return the size
      */
@@ -37,6 +39,7 @@ public class Main {
 
     /**
      * TODO clarify requirements about generating array and make a proper class with tests
+     *
      * @param size
      * @return an int[] with size defined by parameter of random numbers between 0-100
      */

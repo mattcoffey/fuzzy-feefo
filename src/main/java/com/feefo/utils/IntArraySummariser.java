@@ -13,8 +13,8 @@ public class IntArraySummariser {
         this.calculator = calculator;
     }
 
-    public IntArrayStats getStats(int...input) {
-        if(input == null || input.length == 0) {
+    public IntArrayStats getStats(int... input) {
+        if (input == null || input.length == 0) {
             throw new IllegalArgumentException("Can't get stats of empty array");
         }
         return IntArrayStats.builder()

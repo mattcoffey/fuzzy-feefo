@@ -5,7 +5,10 @@ import java.math.MathContext;
 import java.util.Comparator;
 import java.util.Set;
 
+import static java.math.BigDecimal.valueOf;
+
 public class JobStandardizer {
+
 
     private static final Set<String> standardTitles =
             Set.of("Architect", "Software engineer", "Quantity surveyor", "Accountant");
@@ -19,8 +22,12 @@ public class JobStandardizer {
             throw new IllegalArgumentException("title cannot be null");
         }
         return standardTitles.stream()
-                .map((standard) -> MatchScore.builder().value(standard).score(score(title, standard)).build())
+                .map((standard) -> buildMatchScore(title, standard))
                 .max(Comparator.naturalOrder()).get().getValue();
+    }
+
+    private MatchScore buildMatchScore(String title, String standard) {
+        return MatchScore.builder().value(standard).score(score(title, standard)).build();
     }
 
     /**
@@ -28,28 +35,29 @@ public class JobStandardizer {
      *
      * @param a
      * @param b
-     * @return the sum of the match scores for each word divided by the number of words
+     * @return the sum of the match scores for each word divided by the number of word comparisons
      */
     private BigDecimal score(String a, String b) {
+
         if (a.equals(b)) {
-            return BigDecimal.valueOf(1.0);
+            return valueOf(1.0);
         }
-        BigDecimal score = BigDecimal.valueOf(0.0);
+        BigDecimal score = valueOf(0.0);
         String[] aWords = a.toLowerCase().split(" ");
         String[] bWords = b.toLowerCase().split(" ");
         for (String bWord : bWords) {
             for (String aWord : aWords) {
                 if (bWord.equals(aWord)) {
-                    score = score.add(BigDecimal.valueOf(1.0));
+                    score = score.add(valueOf(1.0));
                 } else if (bWord.contains(aWord) || aWord.contains(bWord)) {
-                    score = score.add(BigDecimal.valueOf(0.8));
+                    score = score.add(valueOf(0.8));
                 } else {
                     score = score.add(lettersScore(aWord, bWord));
                 }
             }
         }
 
-        return score.divide(BigDecimal.valueOf(aWords.length), new MathContext(3));
+        return score.divide(valueOf((long) aWords.length * bWords.length), new MathContext(4));
     }
 
     /**
@@ -57,7 +65,7 @@ public class JobStandardizer {
      * @param b
      * @return the number of letters that are contained in the other word (both ways) divided by the total number of
      * letters in both words
-     * multiplied by 0.5 (lower weight on this relatively inaccurate factor)
+     * Divide sum of scores by the number of comparisons to normalise between 0 and 1
      */
     private BigDecimal lettersScore(String a, String b) {
         int count = 0;
@@ -73,8 +81,7 @@ public class JobStandardizer {
             }
         }
 
-        return BigDecimal.valueOf(count)
-                .divide(BigDecimal.valueOf(b.length() + a.length()), new MathContext(4))
-                .multiply(BigDecimal.valueOf(0.5));
+        return valueOf(count)
+                .divide(valueOf((long) b.length() * a.length()), new MathContext(4));
     }
 }
